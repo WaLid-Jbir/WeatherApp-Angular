@@ -1,1 +1,40 @@
 /* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  font-family: "DM Mono", monospace;
+}
+html,
+body {
+  width: 100%;
+  /*   background-color: #9ca3af; */
+  background: rgba(77, 65, 246, 0.884);
+  background: linear-gradient(
+    130deg,
+    rgba(70, 61, 212, 1) 0%,
+    rgb(102, 102, 254) 61%
+  );
+}
+::-webkit-scrollbar {
+  display: none;
+}
+.blur {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+}
+
+@media (min-width: 734px) {
+  body {
+    background: rgba(77, 65, 246, 0.884);
+    background: linear-gradient(
+      130deg,
+      rgba(70, 61, 212, 1) 0%,
+      rgb(102, 102, 254) 61%
+    );
+  }
+}
+
+#cityInput{
+    padding-left: 40px;
+}
