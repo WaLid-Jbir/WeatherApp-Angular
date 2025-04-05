@@ -6,23 +6,28 @@
           <path d="M18.031 16.6168L22.3137 20.8995L20.8995 22.3137L16.6168 18.031C15.0769 19.263 13.124 20 11 20C6.032 20 2 15.968 2 11C2 6.032 6.032 2 11 2C15.968 2 20 6.032 20 11C20 13.124 19.263 15.0769 18.031 16.6168ZM16.0247 15.8748C17.2475 14.6146 18 12.8956 18 11C18 7.1325 14.8675 4 11 4C7.1325 4 4 7.1325 4 11C4 14.8675 7.1325 18 11 18C12.8956 18 14.6146 17.2475 15.8748 16.0247L16.0247 15.8748Z"></path>
         </svg>
       </button>
-      <input id="cityInput" name="cityName" [(ngModel)]="cityName" class="w-full text-white rounded-full border-2 border-transparent px-5 py-3 pl-8 placeholder-gray-400 shadow-md transition-all bg-gray-900 duration-300 focus:border-blue-500 focus:outline-none" placeholder="Search..." required="" type="text" />
+      <div class="flex gap-2">
+        <input id="cityInput" name="cityName" [(ngModel)]="cityName" class="w-full text-white rounded-full border-2 border-transparent px-5 py-3 pl-8 placeholder-gray-400 shadow-md transition-all bg-gray-900 duration-300 focus:border-blue-500 focus:outline-none" placeholder="Search..." required="" type="text" />
+        <button (click)="toggleTemperatureUnit()" class="text-white rounded-full border-2 border-transparent px-5 py-3 shadow-md transition-all bg-gray-900 duration-300 focus:border-blue-500">
+          {{ isCelsius ? '°C' : '°F' }}
+        </button>
+      </div>
     </form>
 
     <div class="w-full">
       <h1 class="text-2xl font-semibold text-center" id="cityName">{{ data.city }}</h1>
     </div>
     <div class="mt-4 text-center">
-      <p class="text-sm" id="date">Friday, 20 January</p>
+      <p class="text-sm" id="date">{{ getDateNow() }}</p>
       <p class="text-lg font-bold" id="weatherDescription">{{ data.main }} ({{ data.description }})</p>
       <div class="flex justify-center">
         <img [src]="data.imageURL" alt="Weather Icon" id="weatherIcon">
       </div>
-      <p class="mt-2 text-7xl ml-7" id="temperature">{{ data.temp }}°C</p>
+      <p class="mt-2 text-7xl" id="temperature">{{ data.temp }}°{{ isCelsius ? 'C' : 'F' }}</p>
     </div>
     <div class="mt-4 from-neutral-600 text-sm">
-      <p class="">Now it feels like <span class="font-semibold" id="feelsLike">{{ data.feels_like }}°C</span></p>
-      <p>Today, the temperature is felt in the range from <span class="font-semibold" id="tempRange">{{ data.min_temp }}°C to {{ data.max_temp }}°C</span>.</p>
+      <p class="">Now it feels like <span class="font-semibold" id="feelsLike">{{ data.feels_like }}°{{ isCelsius ? 'C' : 'F' }}</span></p>
+      <p>Today, the temperature is felt in the range from <span class="font-semibold" id="tempRange">{{ data.min_temp }}°{{ isCelsius ? 'C' : 'F' }} to {{ data.max_temp }}°{{ isCelsius ? 'C' : 'F' }}</span>.</p>
     </div>
     <div class="my-5 flex items-center justify-around rounded-lg bg-gray-900 px-3 p-6 text-sm text-yellow-500">
       <div class="flex flex-col items-center gap-2">
