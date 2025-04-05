@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { WeatherService } from '../../services/weather.service';
 import { NgClass } from '@angular/common';
+import moment from 'moment';
 
 @Component({
   selector: 'app-weather-card',
@@ -12,6 +13,9 @@ import { NgClass } from '@angular/common';
 export class WeatherCardComponent implements OnInit {
   
   cityName: string = "London";
+
+  isCelsius: boolean = true; // 🔁 Track current unit
+  
   data: any = {
     temp: '',
     humidity: '',
@@ -27,7 +31,9 @@ export class WeatherCardComponent implements OnInit {
     max_temp: '',
   };
 
-  constructor( private readonly weatherService: WeatherService) { }
+  private kelvinTempData: any = {};
+
+  constructor(private readonly weatherService: WeatherService) {}
 
   ngOnInit(): void {
     this.loadData();
@@ -37,8 +43,14 @@ export class WeatherCardComponent implements OnInit {
     if (this.cityName) {
       this.weatherService.fetchData(this.cityName).subscribe({
         next: (data: any) => {
-          console.log(data);
-          this.data.temp = (data.main.temp - 273.15).toFixed(2);
+          // Store Kelvin temps to support toggling later
+          this.kelvinTempData = {
+            temp: data.main.temp,
+            feels_like: data.main.feels_like,
+            min_temp: data.main.temp_min,
+            max_temp: data.main.temp_max,
+          };
+
           this.data.humidity = data.main.humidity;
           this.data.wind = data.wind.speed;
           this.data.visibility = data.visibility;
@@ -47,9 +59,10 @@ export class WeatherCardComponent implements OnInit {
           this.data.imageURL = `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`;
           this.data.main = data.weather[0].main;
           this.data.description = data.weather[0].description;
-          this.data.feels_like = (data.main.feels_like - 273.15).toFixed(2);
-          this.data.min_temp = (data.main.temp_min - 273.15).toFixed(2);
-          this.data.max_temp = (data.main.temp_max - 273.15).toFixed(2);
+
+          // Display temps initially in Celsius
+          this.convertToCelsius();
+          this.isCelsius = true;
         },
         error: (error) => {
           console.log("Error while fetching data", error);
@@ -57,5 +70,30 @@ export class WeatherCardComponent implements OnInit {
       });
     }
   }
-  
+
+  // Convert to Celsius
+  convertToCelsius() {
+    this.data.temp = (this.kelvinTempData.temp - 273.15).toFixed(2);
+    this.data.feels_like = (this.kelvinTempData.feels_like - 273.15).toFixed(2);
+    this.data.min_temp = (this.kelvinTempData.min_temp - 273.15).toFixed(2);
+    this.data.max_temp = (this.kelvinTempData.max_temp - 273.15).toFixed(2);
+  }
+
+  // Convert to Fahrenheit
+  convertToFahrenheit() {
+    this.data.temp = ((this.kelvinTempData.temp - 273.15) * 9/5 + 32).toFixed(2);
+    this.data.feels_like = ((this.kelvinTempData.feels_like - 273.15) * 9/5 + 32).toFixed(2);
+    this.data.min_temp = ((this.kelvinTempData.min_temp - 273.15) * 9/5 + 32).toFixed(2);
+    this.data.max_temp = ((this.kelvinTempData.max_temp - 273.15) * 9/5 + 32).toFixed(2);
+  }
+
+  // Toggle Unit
+  toggleTemperatureUnit() {
+    this.isCelsius = !this.isCelsius;
+    this.isCelsius ? this.convertToCelsius() : this.convertToFahrenheit();
+  }
+
+  getDateNow(): string {
+    return `${moment().format('dddd, D MMMM, YYYY, HH:mm')}`;
+  }
 }
