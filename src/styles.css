@@ -42,3 +42,20 @@ body {
 #cityInput{
     padding-left: 40px;
 }
+
+.bg-day {
+  background: linear-gradient(
+    130deg,
+    rgba(135, 206, 250, 1) 0%,   /* Light blue */
+    rgba(255, 223, 186, 1) 61%   /* Warm peach */
+  );
+  background-size: 200% 200%;
+  animation: dayGradientMove 10s ease infinite;
+  color: #333;
+}
+
+@keyframes dayGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
