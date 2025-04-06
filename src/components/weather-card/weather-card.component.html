@@ -1,5 +1,14 @@
-<div class="flex min-h-screen items-center justify-center font-mono duration-200 max-w-lg m-auto" [ngClass]="!data.temp ? 'bg-blur' : ''">
-  <div class="w-full h-full lg:max-w-md rounded-xl p-2 lg:p-4 text-black m-2 mx-3 my-8 px-3 py-5 shadow-lg blur mx-4 max-w-sm">
+<div class="flex min-h-screen items-center justify-center font-mono duration-200 max-w-lg m-auto"
+  [ngClass]="{
+    'bg-blur': !data.temp,
+  }"
+>
+  <div class="w-full h-full lg:max-w-md rounded-xl p-2 lg:p-4 text-black m-2 mx-3 my-8 px-3 py-5 shadow-lg blur mx-4 max-w-sm"
+    [ngClass]="{
+      'bg-day': isDay,
+      'bg-night': !isDay
+    }"
+  >
     <form class="relative m-auto w-full bg-transparent mb-3" id="weatherForm">
       <button type="submit" class="absolute left-2 top-3 p-1" (click)="loadData()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="#303130">
@@ -14,8 +23,14 @@
       </div>
     </form>
 
-    <div class="w-full">
+    <div class="w-full flex justify-center items-center gap-2">
       <h1 class="text-2xl font-semibold text-center" id="cityName">{{ data.city }}</h1>
+      @if (isDay) {
+        <span style="font-size: 36px;" title="Day">🌞</span>
+      }
+      @else{
+        <span style="font-size: 36px;" title="Night">🌙</span>
+      }
     </div>
     <div class="mt-4 text-center">
       <p class="text-sm" id="date">{{ getDateNow() }}</p>

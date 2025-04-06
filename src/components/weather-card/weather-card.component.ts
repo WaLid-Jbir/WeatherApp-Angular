@@ -15,6 +15,8 @@ export class WeatherCardComponent implements OnInit {
   cityName: string = "London";
 
   isCelsius: boolean = true; // 🔁 Track current unit
+
+  isDay: boolean = true;
   
   data: any = {
     temp: '',
@@ -43,6 +45,7 @@ export class WeatherCardComponent implements OnInit {
     if (this.cityName) {
       this.weatherService.fetchData(this.cityName).subscribe({
         next: (data: any) => {
+          console.log(data);
           // Store Kelvin temps to support toggling later
           this.kelvinTempData = {
             temp: data.main.temp,
@@ -60,11 +63,16 @@ export class WeatherCardComponent implements OnInit {
           this.data.main = data.weather[0].main;
           this.data.description = data.weather[0].description;
 
+          // Set isDay based on weather icon
+          this.isDay = data.weather[0].icon.endsWith("d");
+
+
           // Display temps initially in Celsius
           this.convertToCelsius();
           this.isCelsius = true;
         },
         error: (error) => {
+          alert("The city was not found. Please enter a valid city name.");
           console.log("Error while fetching data", error);
         }
       });
